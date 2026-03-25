@@ -1,55 +1,55 @@
 # Unity MCP + Claude Code Setup Guide
 
-> 让 Claude Code 通过 MCP 直接操控你的 Unity Editor
+> Let Claude Code control your Unity Editor directly via MCP
 
-## 前置要求
+## Prerequisites
 
 - macOS (Apple Silicon)
-- Unity 2022.3+ 项目
-- Claude Code CLI（终端运行 `claude` 能启动）
-- Homebrew（可选，用于安装 .NET）
+- Unity 2022.3+ project
+- Claude Code CLI (running `claude` in terminal should launch it)
+- Homebrew (optional, for installing .NET)
 
 ---
 
-## 第一步：安装 Unity MCP 插件
+## Step 1: Install the Unity MCP Plugin
 
-1. 打开你的 Unity 项目
-2. 菜单栏 → **Window** → **Package Manager**
-3. 点左上角 **+** → **Add package from git URL...**
-4. 输入：
+1. Open your Unity project
+2. Menu bar → **Window** → **Package Manager**
+3. Click **+** (top left) → **Add package from git URL...**
+4. Enter:
    ```
    https://github.com/IvanMurzak/Unity-MCP.git
    ```
-5. 等待安装和编译完成（Console 里没有红色报错就 OK）
+5. Wait for installation and compilation to finish (no red errors in Console = OK)
 
 ---
 
-## 第二步：配置 Unity 侧的 MCP 连接
+## Step 2: Configure the MCP Connection in Unity
 
-1. 安装完成后，Unity 菜单栏会多出一个 **AI Game Developer** 窗口（或者在 Window 菜单里找）
-2. 打开 **AI Game Developer** 窗口，设置如下：
+1. After installation, a new **AI Game Developer** window appears (find it under the Window menu)
+2. Open the **AI Game Developer** window and configure:
 
-| 设置项 | 值 |
+| Setting | Value |
 |---|---|
 | Connection | **Custom** |
 | Transport | **stdio** |
 | Authorization Token | **none** |
 | AI agent | **Claude Code** |
 
-3. 点 **Connect**（Unity 状态变绿 = 连接成功）
+3. Click **Connect** (green status = connected)
 
-> **注意**：stdio 模式下 MCP server 不需要手动 Start，Claude Code 会自动启动 server 实例。
+> **Note**: In stdio mode, the MCP server doesn't need to be started manually — Claude Code launches the server instance automatically.
 
 ---
 
-## 第三步：生成配置文件
+## Step 3: Generate Configuration Files
 
-在 AI Game Developer 窗口底部：
+At the bottom of the AI Game Developer window:
 
-1. 点 **Enable Skills** — 生成 `.claude/skills/` 目录
-2. 点 **Configure**（MCP 区域旁边）— 生成 `.mcp.json` 配置文件
+1. Click **Enable Skills** — generates the `.claude/skills/` directory
+2. Click **Configure** (next to the MCP section) — generates the `.mcp.json` config file
 
-生成的 `.mcp.json` 大概长这样：
+The generated `.mcp.json` looks roughly like this:
 
 ```json
 {
@@ -61,7 +61,7 @@
         "client-transport=stdio",
         "authorization=none"
       ],
-      "command": "<你的项目路径>/Library/mcp-server/osx-arm64/unity-mcp-server"
+      "command": "<your-project-path>/Library/mcp-server/osx-arm64/unity-mcp-server"
     }
   }
 }
@@ -69,88 +69,88 @@
 
 ---
 
-## 第四步：用 Claude Code 连接 Unity
+## Step 4: Connect Claude Code to Unity
 
-1. 打开终端
-2. `cd` 到你的 Unity 项目根目录：
+1. Open Terminal
+2. `cd` to your Unity project root:
    ```bash
    cd /path/to/your/unity-project
    ```
-3. 启动 Claude Code：
+3. Launch Claude Code:
    ```bash
    claude
    ```
-4. Claude Code 会自动读取 `.mcp.json`，启动 MCP server 并连接到 Unity
+4. Claude Code will automatically read `.mcp.json`, start the MCP server, and connect to Unity
 
 ---
 
-## 验证连接
+## Verify the Connection
 
-在 Claude Code 里试试这些命令：
+Try these commands in Claude Code:
 
-- "帮我截一张 Scene View 的截图"
-- "列出当前场景中所有 GameObject"
-- "创建一个新的空 GameObject 叫 TestObject"
+- "Take a screenshot of the Scene View"
+- "List all GameObjects in the current scene"
+- "Create an empty GameObject called TestObject"
 
-如果能正常响应，说明连接成功。
+If it responds correctly, the connection is working.
 
 ---
 
-## 可用工具（共 58 个）
+## Available Tools (58 total)
 
-连接成功后 Claude Code 可以操作的功能：
+Once connected, Claude Code can use these capabilities:
 
-### 资源管理
-- `assets-find` — 搜索项目资源
-- `assets-create-folder` — 创建文件夹
-- `assets-copy` / `assets-move` / `assets-delete` — 复制/移动/删除资源
-- `assets-material-create` — 创建材质
-- `assets-prefab-create` / `assets-prefab-instantiate` — 创建/实例化 Prefab
+### Asset Management
+- `assets-find` — Search project assets
+- `assets-create-folder` — Create folders
+- `assets-copy` / `assets-move` / `assets-delete` — Copy/move/delete assets
+- `assets-material-create` — Create materials
+- `assets-prefab-create` / `assets-prefab-instantiate` — Create/instantiate Prefabs
 
-### GameObject 操作
+### GameObject Operations
 - `gameobject-create` / `gameobject-destroy` / `gameobject-duplicate`
-- `gameobject-find` — 查找 GameObject
-- `gameobject-modify` — 修改 Transform 等属性
+- `gameobject-find` — Find GameObjects
+- `gameobject-modify` — Modify Transform and other properties
 - `gameobject-component-add` / `gameobject-component-get` / `gameobject-component-modify`
 
-### 场景管理
+### Scene Management
 - `scene-open` / `scene-save` / `scene-create`
-- `scene-list-opened` — 列出已打开的场景
+- `scene-list-opened` — List opened scenes
 
-### 脚本与代码
+### Scripts & Code
 - `script-read` / `script-update-or-create` / `script-delete`
-- `script-execute` — 直接执行 C# 代码
+- `script-execute` — Execute C# code directly
 
-### 截图与调试
+### Screenshots & Debugging
 - `screenshot-scene-view` / `screenshot-game-view` / `screenshot-camera`
 - `console-get-logs` / `console-clear-logs`
 
-### 包管理
+### Package Management
 - `package-list` / `package-add` / `package-remove` / `package-search`
 
-### 测试
-- `tests-run` — 运行单元测试
+### Testing
+- `tests-run` — Run unit tests
 
 ---
 
-## 常见问题
+## Troubleshooting
 
-### Q: http 模式连接报 "Connection refused"
-**A**: 切换到 **stdio** 模式。Custom 连接 → Transport 选 stdio。
+### Q: HTTP mode shows "Connection refused"
+**A**: Switch to **stdio** mode. Custom connection → Transport → select stdio.
 
-### Q: 编译报错 / 安装失败
-**A**: 确保 Unity 版本 >= 2022.3，并且项目使用了 .NET Standard 2.1 或更高。
+### Q: Compilation errors / installation failed
+**A**: Make sure Unity version >= 2022.3 and your project uses .NET Standard 2.1 or higher.
 
-### Q: Claude Code 启动后没识别到 MCP
-**A**: 确认 `.mcp.json` 文件在项目根目录下，且 `command` 路径指向的 `unity-mcp-server` 文件存在。
+### Q: Claude Code doesn't detect MCP after launch
+**A**: Confirm `.mcp.json` exists in the project root directory, and the `command` path points to an existing `unity-mcp-server` binary.
 
-### Q: 多个 Unity 项目怎么办？
-**A**: 每个项目都需要单独安装插件、Configure 生成 `.mcp.json`。Claude Code 在哪个项目目录启动，就连接哪个项目。
+### Q: How to handle multiple Unity projects?
+**A**: Each project needs its own plugin installation and `.mcp.json` generated via Configure. Claude Code connects to whichever project directory it's launched from.
 
 ---
 
-## 插件信息
+## Plugin Info
 
-- 插件：[IvanMurzak/Unity-MCP](https://github.com/IvanMurzak/Unity-MCP)
-- 版本：0.60.0
-- 协议：MCP (Model Context Protocol)
+- Plugin: [IvanMurzak/Unity-MCP](https://github.com/IvanMurzak/Unity-MCP)
+- Version: 0.60.0
+- Protocol: MCP (Model Context Protocol)
